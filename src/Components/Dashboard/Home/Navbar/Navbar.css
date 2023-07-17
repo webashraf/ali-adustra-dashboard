@@ -1,0 +1,7 @@
+.navbar-search{
+    outline: 0 !important;
+}
+input.input.navbar-search.outline-0.border-0 {
+    width: 172px;
+    height: 41px;
+}
