@@ -2,8 +2,8 @@ import Navbar from "./Navbar/Navbar";
 
 const Home = () => {
     return (
-        <div>
-            <Navbar />
+        <div className="text-7xl">
+            Dashboard
         </div>
     );
 };
