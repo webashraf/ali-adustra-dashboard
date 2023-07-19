@@ -4,17 +4,35 @@ import { PiStudentFill } from "react-icons/pi";
 import { GiPublicSpeaker } from "react-icons/gi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { } from "react-icons/bs";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
 
 const Main = () => {
+  const newUserMenu = (
+    <div>
+      <ul className="space-y-2">
+        <h2 className="text-white my-2 ">For Teacher...</h2>
+      <div className="flex gap-1">
+      <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-red-500">SignIn</li>
+      <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-red-500">SignUp</li>
+      </div>
+    </ul>
+    <ul className=" space-y-2">
+      <h2 className="text-white my-2 ">For Student</h2>
+      <div className="flex gap-1">
+      <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-lime-500">SignIn</li>
+      <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-lime-500">SignUp</li>
+      </div>
+    </ul>
+    </div>
+  )
   const adminMenu = (
     <ul
       className="text-md
     text-white py-20 space-y-2"
     >
-      <li className="flex items-center gap-3 text-[#ffffffa4]"> <BsStarHalf /> Dashboard</li>
-      <li className="flex items-center gap-3 text-[#ffffffa4]"><BsPersonVideo3 />Teacher</li>
+      <Link to={"/"} className="flex items-center gap-3 text-[#ffffffa4]"> <BsStarHalf /> Dashboard</Link>
+      <Link to={"/teachers"} className="flex items-center gap-3 text-[#ffffffa4]"><BsPersonVideo3 />Teacher</Link>
       <li className="flex items-center gap-3 text-[#ffffffa4]"><BsFillPersonLinesFill /> Class</li>
       <li className="flex items-center gap-3 text-[#ffffffa4]"><PiStudentFill />Student</li>
       <li className="flex items-center gap-3 text-[#ffffffa4]"><BsPaperclip /> Notices</li>
@@ -31,11 +49,12 @@ const Main = () => {
             AliEdustra
           </h1>
         </div>
+        {newUserMenu}
 
         {adminMenu}
       </div>
 
-      <div className="text-7xl w-full">
+      <div className="w-full">
         <Navbar></Navbar>
         <div className="w-[840px] mx-auto">
           <Outlet></Outlet>
