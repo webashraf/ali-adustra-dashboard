@@ -1,0 +1,11 @@
+.loginForm{
+
+}
+form.loginForm input {
+    background-color: #efefef;
+    border-bottom: 3px solid rgb(0, 0, 0);
+    outline: 0;
+    height: 40px;
+    width: 100%;
+    padding: 0 10px;
+}
