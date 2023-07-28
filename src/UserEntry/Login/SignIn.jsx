@@ -1,7 +1,10 @@
 import { useForm, Controller } from "react-hook-form";
 import "./SignIn.css";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 const SignIn = () => {
+  const {userSignInUsingEmailAndPass} = useContext(AuthContext);
   const {
     control,
     handleSubmit,
@@ -10,6 +13,8 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    userSignInUsingEmailAndPass(data.email, data.password)
+    .then(result => console.log(result))
   };
   return (
     <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">

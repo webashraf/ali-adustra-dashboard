@@ -17,7 +17,7 @@ const TsignUp = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="loginForm space-y-4 w-[300px]"
         >
-          <h2 className="font-serif font-bold text-4xl pb-5 underline">Register as a Student</h2>
+          <h2 className="font-serif font-bold text-4xl pb-5 underline">Register as a Teacher</h2>
           <div>
             <Controller
               name="email"

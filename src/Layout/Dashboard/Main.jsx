@@ -11,34 +11,13 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import {} from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
 import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const Main = () => {
-  const newUserMenu = (
-    <div>
-      <ul className="space-y-2">
-        <h2 className="text-white my-2 ">For Teacher...</h2>
-        <div className="flex gap-1">
-          <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-red-500">
-            SignIn
-          </li>
-          <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-red-500">
-            SignUp
-          </li>
-        </div>
-      </ul>
-      <ul className=" space-y-2">
-        <h2 className="text-white my-2 ">For Student</h2>
-        <div className="flex gap-1">
-          <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-lime-500">
-            SignIn
-          </li>
-          <li className="flex items-center gap-3 text-[#ffffffa4] btn-sm bg-lime-500">
-            SignUp
-          </li>
-        </div>
-      </ul>
-    </div>
-  );
+  const {user, signOutUser} = useContext(AuthContext);
+  console.log(user);
+
   const adminMenu = (
     <ul
       className="text-md
@@ -74,6 +53,14 @@ const Main = () => {
       </li>
     </ul>
   );
+
+  const logOutBtn = () => {
+    signOutUser()
+    .then(result => {})
+  }
+
+
+
   return (
     <div className="flex">
       <div className="bg-slate-900 w-[257px] h-screen px-6">
@@ -87,6 +74,7 @@ const Main = () => {
         {/* {newUserMenu} */}
 
         {adminMenu}
+        <button onClick={logOutBtn} className="btn btn-sm">LogOut</button>
       </div>
 
       <div className="w-full">
