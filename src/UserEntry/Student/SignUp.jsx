@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const SignUp = () => {
-  const {createUserUsingEmailAndPass, updateUserProfile} = useContext(AuthContext);
+  const { user ,createUserUsingEmailAndPass, updateUserProfile} = useContext(AuthContext);
     const {
         control,
         handleSubmit,
@@ -12,19 +12,54 @@ const SignUp = () => {
       } = useForm();
     
       const onSubmit = (data) => {
-        console.log("clicked");
-        console.log(data.email, data.password);
+        // console.log(data.text, data.url, data.email, data.password);
         const email = data.email;
         const password = data.password;
-        createUserUsingEmailAndPass(email, password)
-        .then(result => {
-          console.log(result);
-          updateUserProfile(data.userName, data.userPhoto)
-          .then(result => {
-            console.log(result);
-          })
+
+        // console.log(data);
+        const newUser = {
+          userName: data.text,
+          userEmail: data.email,
+          userPhoto: data.url,
+          role: "student",
+          registerDate: new Date()
+        }
+        console.log(newUser);
+
+        fetch('http://localhost:3000/addUser', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newUser)
         })
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
+
+        // createUserUsingEmailAndPass(email, password)
+        // .then(result => {
+
+        //   console.log("result signup")
+          
+        //   updateUserProfile(data.text, data.url)
+
+        //   .then(() => {
+
+        //   }).catch((error) => {
+        //     console.log("updateUserProfile EROOR", error);
+        //   });
+
+        // })
+        // .catch(error => {
+
+        //   console.log(error);
+          
+        // })
+
       };
+      if (user) {
+        return <Navigate to={"/"}></Navigate>
+      }
     return (
         <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">
         <form
@@ -32,20 +67,28 @@ const SignUp = () => {
           className="loginForm space-y-4 w-[300px]"
         >
           <h2 className="font-serif font-bold text-4xl pb-5 underline">Register as a Student</h2>
+
           <div>
             <Controller
-              name="userName"
+              name="text"
               control={control}
               rules={{
-                required: "Name is required",
-                // pattern: {
-                //   value: /^\S+@\S+$/i,
-                //   message: "Invalid Name format",
-                // },
+                required: "Email is required",
               }}
-              render={({ field }) => <input {...field} placeholder="Name" />}
+              render={({ field }) => <input {...field} placeholder="Your name" />}
             />
-            {errors.userName && <span>{errors.userName.message}</span>}
+            {errors.email && <span>{errors.email.message}</span>}
+          </div>
+          <div>
+            <Controller
+              name="url"
+              control={control}
+              rules={{
+                required: "Email is required",
+              }}
+              render={({ field }) => <input {...field} placeholder="Photo url" />}
+            />
+            {errors.email && <span>{errors.email.message}</span>}
           </div>
           <div>
             <Controller
@@ -62,21 +105,7 @@ const SignUp = () => {
             />
             {errors.email && <span>{errors.email.message}</span>}
           </div>
-          <div>
-            <Controller
-              name="userPhoto"
-              control={control}
-              rules={{
-                required: "Photo is required",
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "Invalid email format",
-                },
-              }}
-              render={({ field }) => <input {...field} placeholder="Photo url" />}
-            />
-            {errors.email && <span>{errors.email.message}</span>}
-          </div>
+
           <div>
             <Controller
               name="password"

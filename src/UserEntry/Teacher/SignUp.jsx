@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const TsignUp = () => {
+  const {user ,createUserUsingEmailAndPass, updateUserProfile} = useContext(AuthContext);
     const {
         control,
         handleSubmit,
@@ -9,8 +12,35 @@ const TsignUp = () => {
       } = useForm();
     
       const onSubmit = (data) => {
-        console.log(data);
+        console.log(data.text, data.url, data.email, data.password);
+        const email = data.email;
+        const password = data.password;
+
+
+        createUserUsingEmailAndPass(email, password)
+        .then(result => {
+
+          console.log("result signup")
+          
+          updateUserProfile(data.text, data.url)
+
+          .then(() => {
+
+          }).catch((error) => {
+            console.log("updateUserProfile EROOR", error);
+          });
+
+        })
+        .catch(error => {
+
+          console.log(error);
+          
+        })
+
       };
+      if (user) {
+        return <Navigate to={"/"}></Navigate>
+      }
     return (
         <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">
         <form
@@ -18,6 +48,29 @@ const TsignUp = () => {
           className="loginForm space-y-4 w-[300px]"
         >
           <h2 className="font-serif font-bold text-4xl pb-5 underline">Register as a Teacher</h2>
+
+          <div>
+            <Controller
+              name="text"
+              control={control}
+              rules={{
+                required: "Email is required",
+              }}
+              render={({ field }) => <input {...field} placeholder="Your name" />}
+            />
+            {errors.email && <span>{errors.email.message}</span>}
+          </div>
+          <div>
+            <Controller
+              name="url"
+              control={control}
+              rules={{
+                required: "Email is required",
+              }}
+              render={({ field }) => <input {...field} placeholder="Photo url" />}
+            />
+            {errors.email && <span>{errors.email.message}</span>}
+          </div>
           <div>
             <Controller
               name="email"
@@ -33,6 +86,7 @@ const TsignUp = () => {
             />
             {errors.email && <span>{errors.email.message}</span>}
           </div>
+
           <div>
             <Controller
               name="password"
@@ -44,12 +98,8 @@ const TsignUp = () => {
             />
             {errors.password && <span>{errors.password.message}</span>}
           </div>
-          <button
-            className="bg-[#efefef] border-b-4 border-black btn-block py-2 font-bold"
-            type="submit"
-          >
-            Login
-          </button>
+          <input className="bg-[#efefef] border-b-4 border-black btn-block py-2 font-bold"  type="submit" value="Submit" />
+
           <div className="">
           <h3 className="text-sky-900 pt-5">
             All ready have an account?{" "}
@@ -63,5 +113,4 @@ const TsignUp = () => {
       </div>
     );
 };
-
 export default TsignUp;

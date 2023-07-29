@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 const SignIn = () => {
-  const {userSignInUsingEmailAndPass} = useContext(AuthContext);
+  const { user, loading, userSignInUsingEmailAndPass } =
+    useContext(AuthContext);
   const {
     control,
     handleSubmit,
@@ -13,10 +14,14 @@ const SignIn = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    userSignInUsingEmailAndPass(data.email, data.password)
-    .then(result => console.log(result))
+    userSignInUsingEmailAndPass(data.email, data.password).then((result) =>
+      console.log(result)
+    );
   };
-  return (
+  if (loading) {
+    return <span className="loading loading-bars loading-lg"></span>;
+  }
+  return !user ? (
     <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -56,9 +61,27 @@ const SignIn = () => {
           Login
         </button>
         <div>
-          <h3>You have not account? <Link to={"/register"} className="underline text-sky-700">Register now</Link>.</h3>
+          <h3>
+            You have not account?{" "}
+            <Link to={"/register"} className="underline text-sky-700">
+              Register now
+            </Link>
+            .
+          </h3>
         </div>
       </form>
+    </div>
+  ) : (
+    <div className="flex justify-center flex-col items-center mt-20">
+      <div className="avatar">
+        <div className="w-24 mask mask-squircle">
+         {user &&  <img src={user?.photoURL} />}
+        </div>
+      </div>
+      {/* <img src={user.photURL} alt="" /> */}
+      <h1 className="text-7xl text-center font-serif">
+        Dashboard <span className="text-sky-600">{user.displayName}</span>
+      </h1>
     </div>
   );
 };
