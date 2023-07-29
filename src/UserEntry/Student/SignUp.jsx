@@ -26,35 +26,38 @@ const SignUp = () => {
         }
         console.log(newUser);
 
-        fetch('http://localhost:3000/addUser', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(newUser)
+        createUserUsingEmailAndPass(email, password)
+        .then(result => {
+
+          console.log("result signup")
+
+          // Add user on mongodb
+          fetch('http://localhost:3000/addUser', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newUser)
+          })
+          .then(response => console.log(response))
+          .catch(error => console.log(error))
+
+
+          // Update name and photo on firebase
+          updateUserProfile(data.text, data.url)
+
+          .then(() => {
+
+          }).catch((error) => {
+            console.log("updateUserProfile EROOR", error);
+          });
+
         })
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
+        .catch(error => {
 
-        // createUserUsingEmailAndPass(email, password)
-        // .then(result => {
-
-        //   console.log("result signup")
+          console.log(error);
           
-        //   updateUserProfile(data.text, data.url)
-
-        //   .then(() => {
-
-        //   }).catch((error) => {
-        //     console.log("updateUserProfile EROOR", error);
-        //   });
-
-        // })
-        // .catch(error => {
-
-        //   console.log(error);
-          
-        // })
+        })
 
       };
       if (user) {
