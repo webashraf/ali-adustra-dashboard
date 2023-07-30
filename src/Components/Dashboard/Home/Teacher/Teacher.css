@@ -2,17 +2,32 @@ ul.react-tabs__tab-list {
     text-align: center;
     border: 0;
 }
-ul.react-tabs__tab-list li {
+ul.react-tabs__tab-list > li{
+    font-size: 20px;
+    font-weight: 600px;
+    color: #16769c;   
+     /* border: 2px solid #16769c; */
+
+}
+ul.react-tabs__tab-list .react-tabs__tab.react-tabs__tab--selected {
     /* box-shadow: 4px 2px 12px 0px rgb(42, 150, 192); */
+    /* overflow: hidden; */
     /* padding: 12px 36px; */
     /* margin-right: 10px; */
-    /* border: 0px; */
-    border-bottom: 2px solid #16769c;
+    border: 1px;
+    /* border-bottom: 2px solid #16769c; */
     color: #16769c;
-    font-weight: 600px;
+    text-decoration: underline;
+    font-weight: 600;
     font-size: 20px;
 }
 .addNotice input {
+    border: 1px solid #16769c;
+    border-bottom: 2px solid #16769c;
+    border-radius: 0px;
+    color: #488fad;
+    font-weight: 600;
+}.addNotice textarea {
     border: 1px solid #16769c;
     border-bottom: 2px solid #16769c;
     border-radius: 0px;

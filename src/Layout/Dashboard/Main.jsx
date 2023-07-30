@@ -1,25 +1,24 @@
+import { useContext } from "react";
 import {
   BsFillPersonLinesFill,
   BsPaperclip,
   BsPersonVideo3,
   BsStarHalf,
 } from "react-icons/bs";
-import {} from "react-icons/fa";
-import { PiStudentFill } from "react-icons/pi";
+import { } from "react-icons/fa";
 import { GiPublicSpeaker } from "react-icons/gi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
-import {} from "react-icons/bs";
+import { PiStudentFill } from "react-icons/pi";
 import { Link, Outlet } from "react-router-dom";
-import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
-import { useContext } from "react";
-import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 import TeacherMenu from "../../AllMenus/TeacherMenu";
+import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
+import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const Main = () => {
   const { user, signOutUser } = useContext(AuthContext);
   console.log(user);
   const logOutBtn = () => {
-    signOutUser().then((result) => {});
+    signOutUser().then((result) => { });
   };
 
   const adminMenu = (
@@ -64,10 +63,10 @@ const Main = () => {
     </ul>
   );
 
- 
+
 
   return (
-    <>
+    <div>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content w-full">
@@ -103,28 +102,7 @@ const Main = () => {
         </div>
       </div>
 
-      {/* <div className="flex">
-      <div className="bg-slate-900 w-[257px] h-screen px-6">
-        <div>
-          <Link to={"/"}>
-            <h1 className="text-3xl py-6 border-b-[2px] text-white text-center font-serif">
-              AliEdustra {user && user.displayName}
-            </h1>
-          </Link>
-        </div>
-
-        {adminMenu}
-        <button onClick={logOutBtn} className="btn btn-sm">LogOut</button>
-      </div>
-
-      <div className="w-full">
-        <Navbar></Navbar>
-        <div className="w-[840px] mx-auto">
-          <Outlet></Outlet>
-        </div>
-      </div>
-    </div> */}
-    </>
+    </div>
   );
 };
 
