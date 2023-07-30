@@ -1,15 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
+import Swal from "sweetalert2";
 import { AuthContext } from "../../../../Firebase/AuthProvider/AuthProvider";
 import './Teacher.css';
-import { useQuery } from "@tanstack/react-query";
 
 
 const Notices = () => {
     const { user } = useContext(AuthContext);
     const [mUser, setMUser] = useState(null);
+    const [singleNotice, setSingleNotice] = useState(null);
     const { control, handleSubmit, errors } = useForm();
 
 
@@ -51,6 +53,53 @@ const Notices = () => {
 
     };
 
+    const updateNotice = async noticeId => {
+
+        console.log(noticeId);
+
+       fetch(`http://localhost:3000/find-single-notice/${noticeId}`)
+       .then(res => res.json())
+       .then(data => setSingleNotice(data))
+       console.log(singleNotice?.title);
+
+
+       const { value: text } = await Swal.fire({
+        input: 'textarea',
+        inputLabel: 'Message',
+        inputPlaceholder: 'Type your message here...',
+        inputAttributes: {
+          'aria-label': 'Type your message here'
+        },
+        showCancelButton: true
+      })
+      
+      if (text) {
+        Swal.fire(text)
+      }
+
+            // const { value: formValues } = await Swal.fire({
+            //   title: 'Enter your details',
+            //   html:
+            //     '<input id="input-field" value={`${singleNotice?.title}`} class="swal2-input" placeholder="Enter text...">' +
+            //     '<textarea id="textarea-field" class="swal2-textarea" placeholder="Enter text..."></textarea>',
+            //   focusConfirm: false,
+            //   preConfirm: () => {
+            //     return {
+            //       inputField: document.getElementById('input-field').value,
+            //       textareaField: document.getElementById('textarea-field').value,
+            //     };
+            //   },
+            // });
+        
+            // if (formValues && formValues.inputField && formValues.textareaField) {
+            //   // Handle form submission here
+            //   console.log('Input Field:', formValues.inputField);
+            //   console.log('Textarea Field:', formValues.textareaField);
+            // }
+          
+
+        
+    }
 
     const  handleDeleteNotice = noticeId => {
         console.log('clicked delete', noticeId);
@@ -106,7 +155,7 @@ const Notices = () => {
                                     <td>{notice.title}</td>
                                     <td>{notice.notice}</td>
                                     <td className="space-x-2">
-                                        <button className="btn btn-xs btn-primary">Update</button>
+                                        <button onClick={() => updateNotice(notice._id)} className="btn btn-xs btn-primary">Update</button>
                                         <button onClick={() => handleDeleteNotice(notice._id)} className="btn btn-xs btn-primary">Delete</button>
                                     </td>
                                     </tr>)
