@@ -13,6 +13,7 @@ import { Link, Outlet } from "react-router-dom";
 import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
+import TeacherMenu from "../../AllMenus/TeacherMenu";
 
 const Main = () => {
   const { user, signOutUser } = useContext(AuthContext);
@@ -95,7 +96,8 @@ const Main = () => {
                   </h1>
                 </Link>
               </div>
-              {adminMenu}
+              <TeacherMenu></TeacherMenu>
+              {/* {adminMenu} */}
             </div>
           </>
         </div>

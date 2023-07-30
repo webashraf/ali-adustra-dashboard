@@ -12,16 +12,38 @@ const TsignUp = () => {
       } = useForm();
     
       const onSubmit = (data) => {
-        console.log(data.text, data.url, data.email, data.password);
+        // console.log(data.text, data.url, data.email, data.password);
         const email = data.email;
         const password = data.password;
 
+        // console.log(data);
+        const newUser = {
+          userName: data.text,
+          userEmail: data.email,
+          userPhoto: data.url,
+          role: "teacher",
+          registerDate: new Date()
+        }
+        console.log(newUser);
 
         createUserUsingEmailAndPass(email, password)
         .then(result => {
 
           console.log("result signup")
-          
+
+          // Add user on mongodb
+          fetch('http://localhost:3000/addUser', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newUser)
+          })
+          .then(response => console.log(response))
+          .catch(error => console.log(error))
+
+
+          // Update name and photo on firebase
           updateUserProfile(data.text, data.url)
 
           .then(() => {

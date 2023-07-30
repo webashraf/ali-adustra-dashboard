@@ -1,9 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import Main from "../../Layout/Dashboard/Main";
-import Home from "../../Components/Dashboard/Home/Home";
+import Attendance from "../../Components/Dashboard/Home/Teacher/Attendance";
+import Notices from "../../Components/Dashboard/Home/Teacher/Notices";
+import Resources from "../../Components/Dashboard/Home/Teacher/Resources";
 import Teacher from "../../Components/Dashboard/Home/Teacher/Teacher";
-import SignIn from "../../UserEntry/Login/SignIn";
+import Main from "../../Layout/Dashboard/Main";
 import EntryDashboard from "../../UserEntry/EntryDashboard/EntryDashboard";
+import SignIn from "../../UserEntry/Login/SignIn";
 import SignUp from "../../UserEntry/Student/SignUp";
 import TsignUp from "../../UserEntry/Teacher/SignUp";
 
@@ -35,6 +37,18 @@ const router = createBrowserRouter([
         {
             path: 'teacher-signup',
             element: <TsignUp></TsignUp>
+        },
+        {
+            path: 'attendance',
+            element: <Attendance></Attendance>
+        },
+        {
+            path: 'notices',
+            element: <Notices></Notices>
+        },
+        {
+            path: 'resources',
+            element: <Resources></Resources>
         }
     ]
     }
