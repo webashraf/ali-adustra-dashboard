@@ -1,39 +1,29 @@
+import { useQuery } from "@tanstack/react-query";
+import AdminDashboard from "../../AllDeshboard/AdminDashboard";
+import StudentDashboard from "../../AllDeshboard/StudentDashboard";
+import TeacherDashboard from "../../AllDeshboard/TeacherDashboard";
+import { useContext } from "react";
+import { AuthContext } from "../../../../Firebase/AuthProvider/AuthProvider";
+
 const Home = () => {
+  const { user} = useContext(AuthContext);
+
+  const {data: userWithRole, refetch} = useQuery({
+    queryKey: ["user", user?.email],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:3000/user?email=${user?.email}`)
+      return res.json()
+    }
+  })
+
+  const userRole = userWithRole && userWithRole?.role;
+  console.log(userRole);
   return (
-    <div className="">
-<div className={"p-10 shadow-lg mb-16"}>
-<h1 className={"text-6xl font-serif"}>Dashboard</h1>
-</div>
-      <div className="flex">
-        <div className="">
-          <div className="stats shadow-2xl">
-            <div className="stat place-items-center">
-              <div className="stat-title">Total Class</div>
-              <div className="stat-value">31K</div>
-              <div className="stat-desc">From January 1st to February 1st</div>
-            </div>
-
-            <div className="stat place-items-center">
-              <div className="stat-title">Total Student</div>
-              <div className="stat-value text-secondary">4,200</div>
-              <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
-            </div>
-            <div className="stat place-items-center">
-              <div className="stat-title">Total Class Notice</div>
-              <div className="stat-value text-secondary">4,200</div>
-              <div className="stat-desc text-secondary">↗︎ 40 (2%)</div>
-            </div>
-
-            <div className="stat place-items-center">
-              <div className="stat-title">Total Public Notice</div>
-              <div className="stat-value">1,200</div>
-              <div className="stat-desc">↘︎ 90 (14%)</div>
-            </div>
-          </div>
-        </div>
-        <div className="w-1/2"></div>
-      </div>
-    </div>
+    <>
+    {userRole === "admin" && <AdminDashboard></AdminDashboard>}
+    {userRole === "teacher" && <TeacherDashboard></TeacherDashboard>}
+    {userRole === "student" && <StudentDashboard></StudentDashboard>}
+    </>
   );
 };
 

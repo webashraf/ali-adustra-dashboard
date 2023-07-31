@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Firebase/AuthProvider/AuthProvider';
 
 const TeacherMenu = () => {
+
+    const { user, signOutUser } = useContext(AuthContext);
+    // console.log(user);
+    const logOutBtn = () => {
+      signOutUser().then((result) => { });
+    };
+
     return (
         <ul className="text-lg
         text-white py-20 space-y-2 menu p-4 w-80 h-full">
@@ -10,6 +18,9 @@ const TeacherMenu = () => {
             <Link to={"/attendance"}>Attendance</Link>
             <Link to={"/notices"}>Notices</Link>
             <Link to={"/resources"}>Resources</Link>
+            <button onClick={logOutBtn} className="btn btn-sm bg-red-600 z-10">
+          LogOut
+        </button>
 
         </ul>
     );

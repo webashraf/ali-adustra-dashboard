@@ -3,6 +3,7 @@ import "./SignIn.css";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
+import Home from "../../Components/Dashboard/Home/Admin/Home";
 const SignIn = () => {
   const { user, loading, userSignInUsingEmailAndPass } =
     useContext(AuthContext);
@@ -72,17 +73,18 @@ const SignIn = () => {
       </form>
     </div>
   ) : (
-    <div className="flex justify-center flex-col items-center mt-20">
-      <div className="avatar">
-        <div className="w-24 mask mask-squircle">
-         {user &&  <img src={user?.photoURL} />}
-        </div>
-      </div>
-      {/* <img src={user.photURL} alt="" /> */}
-      <h1 className="text-7xl text-center font-serif">
-        Dashboard <span className="text-sky-600">{user.displayName}</span>
-      </h1>
-    </div>
+    // <div className="flex justify-center flex-col items-center mt-20">
+    //   <div className="avatar">
+    //     <div className="w-24 mask mask-squircle">
+    //      {user &&  <img src={user?.photoURL} />}
+    //     </div>
+    //   </div>
+    //   {/* <img src={user.photURL} alt="" /> */}
+    //   <h1 className="text-7xl text-center font-serif">
+    //     Dashboard <span className="text-sky-600">{user.displayName}</span>
+    //   </h1>
+    // </div>
+    <Home></Home>
   );
 };
 

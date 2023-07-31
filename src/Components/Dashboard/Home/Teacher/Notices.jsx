@@ -6,6 +6,8 @@ import 'react-tabs/style/react-tabs.css';
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../Firebase/AuthProvider/AuthProvider";
 import './Teacher.css';
+import TModal from "./TModal/TModal";
+import moment from "moment/moment";
 
 
 const Notices = () => {
@@ -15,7 +17,7 @@ const Notices = () => {
     const { control, handleSubmit, errors } = useForm();
 
 
-     const {refetch, data: myNotice = []} = useQuery({
+    const { refetch: noticeRefetch, data: myNotice = [] } = useQuery({
         queryKey: [],
         queryFn: async () => {
             const res = await fetch(`http://localhost:3000/my-notice?email=${user?.email}`)
@@ -23,9 +25,10 @@ const Notices = () => {
         }
     })
 
+    console.log(myNotice?.postTime);
 
     const onSubmit = (data) => {
-        refetch()
+        noticeRefetch()
 
         const teacherNotice = {
             title: data?.title,
@@ -45,71 +48,36 @@ const Notices = () => {
             },
             body: JSON.stringify(teacherNotice)
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
 
 
     };
 
-    const updateNotice = async noticeId => {
-
-        console.log(noticeId);
-
-       fetch(`http://localhost:3000/find-single-notice/${noticeId}`)
-       .then(res => res.json())
-       .then(data => setSingleNotice(data))
-       console.log(singleNotice?.title);
 
 
-       const { value: text } = await Swal.fire({
-        input: 'textarea',
-        inputLabel: 'Message',
-        inputPlaceholder: 'Type your message here...',
-        inputAttributes: {
-          'aria-label': 'Type your message here'
-        },
-        showCancelButton: true
-      })
-      
-      if (text) {
-        Swal.fire(text)
-      }
-
-            // const { value: formValues } = await Swal.fire({
-            //   title: 'Enter your details',
-            //   html:
-            //     '<input id="input-field" value={`${singleNotice?.title}`} class="swal2-input" placeholder="Enter text...">' +
-            //     '<textarea id="textarea-field" class="swal2-textarea" placeholder="Enter text..."></textarea>',
-            //   focusConfirm: false,
-            //   preConfirm: () => {
-            //     return {
-            //       inputField: document.getElementById('input-field').value,
-            //       textareaField: document.getElementById('textarea-field').value,
-            //     };
-            //   },
-            // });
-        
-            // if (formValues && formValues.inputField && formValues.textareaField) {
-            //   // Handle form submission here
-            //   console.log('Input Field:', formValues.inputField);
-            //   console.log('Textarea Field:', formValues.textareaField);
-            // }
-          
-
-        
+    const updateNotice = noticeId => {
+        fetch(`http://localhost:3000/find-single-notice/${noticeId}`)
+        .then(res => res.json())
+        .then(data => setSingleNotice(data))
+        console.log(singleNotice?.title);
+        window.my_modal_5.showModal();
     }
 
-    const  handleDeleteNotice = noticeId => {
+
+
+
+    const handleDeleteNotice = noticeId => {
         console.log('clicked delete', noticeId);
-        refetch()
+        noticeRefetch()
         fetch(`http://localhost:3000/delete-notice/${noticeId}`, {
             method: 'DELETE',
         })
-        .then(res => res.json())
-        .then(data => console.log(data))
-        
+            .then(res => res.json())
+            .then(data => console.log(data))
+
     }
 
 
@@ -120,119 +88,127 @@ const Notices = () => {
             .then(res => res.json())
             .then(data => {
                 setMUser(data);
-            })        
+            })
 
 
     }, [user, setMUser])
 
 
     return (
-        <div className="pb-20">
-            <h2 className="text-7xl text-sky-500 font-serif text-center my-10">Manage Notices</h2>
-            <Tabs className={"shadow-xl shadow-sky-300 p-10 "}>
-                <TabList >
-                    <Tab>All Notice</Tab>
-                    <Tab>Add a Notice</Tab>
-                </TabList>
+        <div>
+            <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                <TModal currentNotice={singleNotice} nRefetch={noticeRefetch}></TModal>
+            </dialog>
+            <div className="pb-20">
+                <h2 className="text-7xl text-sky-500 font-serif text-center my-10">Manage Notices</h2>
+                <Tabs className={"shadow-xl shadow-sky-300 p-10 "}>
+                    <TabList >
+                        <Tab>All Notice</Tab>
+                        <Tab>Add a Notice</Tab>
+                    </TabList>
 
-                <TabPanel>
-                    <div className="overflow-x-auto">
-                        <table className="table">
-                            {/* head */}
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Title</th>
-                                    <th>Notice</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <TabPanel>
+                        <div className="overflow-x-auto">
+                            <table className="table">
+                                {/* head */}
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Title</th>
+                                        <th>Notice</th>
+                                        <th>Publish Time</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                {
-                                    myNotice.map((notice, index) => <tr key={notice._id} className="hover">
-                                         <th>{index + 1}</th>
-                                    <td>{notice.title}</td>
-                                    <td>{notice.notice}</td>
-                                    <td className="space-x-2">
-                                        <button onClick={() => updateNotice(notice._id)} className="btn btn-xs btn-primary">Update</button>
-                                        <button onClick={() => handleDeleteNotice(notice._id)} className="btn btn-xs btn-primary">Delete</button>
-                                    </td>
-                                    </tr>)
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </TabPanel>
+                                    {
+                                        myNotice.map((notice, index) => <tr key={notice._id} className="hover">
+                                            <th>{index + 1}</th>
+                                            <td>{notice?.title}</td>
+                                            <td>{notice?.notice.slice(0, 20)}</td>
+                                            {/* <td>{notice?.postTime}</td> */}
+                                            <td>{moment(notice?.postTime).format("dddd, MMMM Do YYYY, h:mm:ss A")}</td>
+                                            <td className="space-x-2">
+                                                <button onClick={() => updateNotice(notice._id)} className="btn btn-xs btn-primary">Update</button>
+                                                <button onClick={() => handleDeleteNotice(notice._id)} className="btn btn-xs btn-primary">Delete</button>
+                                            </td>
+                                        </tr>)
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </TabPanel>
 
-                <TabPanel>
+                    <TabPanel>
 
-                    <div className="flex justify-center addNotice">
-                        <form className="w-full max-w-lg mt-8" onSubmit={handleSubmit(onSubmit)}>
-                            <div className="-mx-3 mb-6">
+                        <div className="flex justify-center addNotice">
+                            <form className="w-full max-w-lg mt-8" onSubmit={handleSubmit(onSubmit)}>
+                                <div className="-mx-3 mb-6">
 
-                                <div className="w-full px-3">
-                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Title
-                                    </label>
-                                    <Controller
-                                        name="title"
-                                        control={control}
-                                        rules={{ required: 'Title is required' }}
-                                        render={({ field }) => (
-                                            <input
-                                                {...field}
-                                                type="text"
-                                                placeholder="Enter your title"
-                                                className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                                            />
+                                    <div className="w-full px-3">
+                                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Title
+                                        </label>
+                                        <Controller
+                                            name="title"
+                                            control={control}
+                                            rules={{ required: 'Title is required' }}
+                                            render={({ field }) => (
+                                                <input
+                                                    {...field}
+                                                    type="text"
+                                                    placeholder="Enter your title"
+                                                    className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                                                />
+                                            )}
+                                        />
+                                        {errors?.title && (
+                                            <p className="text-red-500 text-xs italic">{errors?.title?.message}</p>
                                         )}
-                                    />
-                                    {errors?.title && (
-                                        <p className="text-red-500 text-xs italic">{errors?.title?.message}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="-mx-3 mb-6">
-
-                                <div className="w-full px-3 mb-6 md:mb-0">
-                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                        Notice
-                                    </label>
-                                    <Controller
-                                        name="notice"
-                                        control={control}
-                                        rules={{ required: 'Notice is required' }}
-                                        render={({ field }) => (
-                                            <textarea
-                                                {...field}
-                                                placeholder="Enter notice"
-                                                className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                                rows={4} // You can adjust the number of rows as needed
-                                            />
-                                        )}
-                                    />
-                                    {errors?.notice && (
-                                        <p className="text-red-500 text-xs italic">{errors?.notice?.message}</p>
-                                    )}
+                                    </div>
                                 </div>
 
-                            </div>
+                                <div className="-mx-3 mb-6">
 
-                            <div className="flex justify-center">
-                                <button
-                                    type="submit"
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                    <div className="w-full px-3 mb-6 md:mb-0">
+                                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                                            Notice
+                                        </label>
+                                        <Controller
+                                            name="notice"
+                                            control={control}
+                                            rules={{ required: 'Notice is required' }}
+                                            render={({ field }) => (
+                                                <textarea
+                                                    {...field}
+                                                    placeholder="Enter notice"
+                                                    className="appearance-none block w-full bg-white text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                                    rows={4} // You can adjust the number of rows as needed
+                                                />
+                                            )}
+                                        />
+                                        {errors?.notice && (
+                                            <p className="text-red-500 text-xs italic">{errors?.notice?.message}</p>
+                                        )}
+                                    </div>
 
-                </TabPanel>
-            </Tabs>
+                                </div>
+
+                                <div className="flex justify-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </TabPanel>
+                </Tabs>
+            </div>
         </div>
     );
 };

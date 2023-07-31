@@ -1,69 +1,28 @@
+import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import {
-  BsFillPersonLinesFill,
-  BsPaperclip,
-  BsPersonVideo3,
-  BsStarHalf,
-} from "react-icons/bs";
 import { } from "react-icons/fa";
-import { GiPublicSpeaker } from "react-icons/gi";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { PiStudentFill } from "react-icons/pi";
 import { Link, Outlet } from "react-router-dom";
+import AdminMenu from "../../AllMenus/AdminMenu";
+import StudentMenu from "../../AllMenus/StudentMenu";
 import TeacherMenu from "../../AllMenus/TeacherMenu";
 import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const Main = () => {
   const { user, signOutUser } = useContext(AuthContext);
-  console.log(user);
-  const logOutBtn = () => {
-    signOutUser().then((result) => { });
-  };
 
-  const adminMenu = (
-    <ul
-      className="text-md
-    text-white py-20 space-y-2 menu p-4 w-80 h-full"
-    >
-      <Link to={"/"} className="flex items-center gap-3 text-[#ffffffa4]">
-        {" "}
-        <BsStarHalf /> Dashboard
-      </Link>
-      <Link
-        to={"/teachers"}
-        className="flex items-center gap-3 text-[#ffffffa4]"
-      >
-        <BsPersonVideo3 />
-        Teacher
-      </Link>
-      <li className="flex items-center gap-3 text-[#ffffffa4]">
-        <BsFillPersonLinesFill /> Class
-      </li>
-      <li className="flex items-center gap-3 text-[#ffffffa4]">
-        <PiStudentFill />
-        Student
-      </li>
-      <li className="flex items-center gap-3 text-[#ffffffa4]">
-        <BsPaperclip /> Notices
-      </li>
-      <li className="flex items-center gap-3 text-[#ffffffa4]">
-        <GiPublicSpeaker /> Public Notices
-      </li>
+  const {data: userWithRole, refetch} = useQuery({
+    queryKey: ["user", user?.email],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:3000/user?email=${user?.email}`)
+      return res.json()
+    }
+  })
 
-      <li className="flex items-center gap-3 text-[#ffffffa4]">
-        <HiOutlineDocumentReport /> Reports
-      </li>
-      <li>
-        {" "}
-        <button onClick={logOutBtn} className="btn btn-sm">
-          LogOut
-        </button>
-      </li>
-    </ul>
-  );
+  const userRole = userWithRole && userWithRole?.role;
+  // console.log(userRole);
 
-
+  console.log("userWithRole", userWithRole);
 
   return (
     <div>
@@ -86,7 +45,7 @@ const Main = () => {
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <>
             {/* Sidebar content here */}
-            <div className="bg-slate-900 h-full">
+            <div className="bg-slate-900 h-full fixed">
               <div>
                 <Link to={"/"}>
                   <h1 className="text-5xl py-6 border-b-[2px] text-white text-center font-serif">
@@ -95,8 +54,11 @@ const Main = () => {
                   </h1>
                 </Link>
               </div>
-              <TeacherMenu></TeacherMenu>
-              {/* {adminMenu} */}
+              {userRole === "admin" && <AdminMenu></AdminMenu>}
+              {userRole === "teacher" && <TeacherMenu role></TeacherMenu>}
+              {userRole === "student" && <StudentMenu></StudentMenu>}
+              {!userWithRole && <h4 className="text-lg font-serif text-white text-center mt-20">Loading...</h4> }
+
             </div>
           </>
         </div>
