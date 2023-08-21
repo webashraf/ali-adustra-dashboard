@@ -5,12 +5,14 @@ import { Link, Outlet } from "react-router-dom";
 import AdminMenu from "../../AllMenus/AdminMenu";
 import StudentMenu from "../../AllMenus/StudentMenu";
 import TeacherMenu from "../../AllMenus/TeacherMenu";
-import Navbar from "../../Components/Dashboard/Home/Navbar/Navbar";
+import Navbar from "../../Components/Dashboard/Navbar/Navbar";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 
 const Main = () => {
   const { user, signOutUser } = useContext(AuthContext);
-
+  const logOutBtn = () => {
+      signOutUser().then((result) => { });
+  };
   const {data: userWithRole, refetch} = useQuery({
     queryKey: ["user", user?.email],
     queryFn: async () => {
@@ -20,18 +22,18 @@ const Main = () => {
   })
 
   const userRole = userWithRole && userWithRole?.role;
-  // console.log(userRole);
+  console.log(userRole);
 
-  console.log("userWithRole", userWithRole);
+  // console.log("userWithRole", userWithRole);
 
   return (
     <div>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content w-full">
+        <div className="drawer-content md:w-[80%] ml-auto">
           {/* Page content here */}
           <Navbar></Navbar>
-          <div className="w-[840px] mx-auto">
+          <div className="w-[840px] mx-auto flex justify-center">
             <Outlet></Outlet>
           </div>
           <label
@@ -45,7 +47,7 @@ const Main = () => {
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <>
             {/* Sidebar content here */}
-            <div className="bg-slate-900 h-full fixed">
+            <div className="bg-slate-900 h-full fixed w-[20%]">
               <div>
                 <Link to={"/"}>
                   <h1 className="text-5xl py-6 border-b-[2px] text-white text-center font-serif">
@@ -57,8 +59,14 @@ const Main = () => {
               {userRole === "admin" && <AdminMenu></AdminMenu>}
               {userRole === "teacher" && <TeacherMenu role></TeacherMenu>}
               {userRole === "student" && <StudentMenu></StudentMenu>}
-              {!userWithRole && <h4 className="text-lg font-serif text-white text-center mt-20">Loading...</h4> }
-
+              {!userWithRole && <h4 className="text-lg font-serif text-white text-center mt-20">Not Found Any User...</h4> }
+              {
+                user &&     <Link>
+                <button onClick={logOutBtn} className="btn btn-sm bg-red-600 z-10">
+                    LogOut
+                </button>
+            </Link>
+              }
             </div>
           </>
         </div>

@@ -7,7 +7,7 @@ const TModal = ({ currentNotice, nRefetch }) => {
 
     const titleRef = useRef(null);
     const noticeRef = useRef(null);
-    console.log('REF',titleRef, noticeRef);
+    // console.log('REF',titleRef, noticeRef);
     const updateNotice = () => {
 
         const updatedNotice = {
@@ -25,7 +25,7 @@ const TModal = ({ currentNotice, nRefetch }) => {
         })
         .then(res => res.json())
         .then(data => console.log(data))
-        nRefetch()
+        nRefetch();
 
 
 

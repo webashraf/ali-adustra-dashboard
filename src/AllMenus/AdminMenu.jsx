@@ -16,8 +16,7 @@ const AdminMenu = () => {
         <>
 
             <ul
-                className="text-md
-    text-white py-20 space-y-2 menu p-4 w-80 h-full"
+                className="text-md text-white py-20 space-y-2 menu p-4 w-80 h-full"
             >
                 <Link to={"/"} className="flex items-center gap-3 text-[#ffffffa4]">
                     {" "}
@@ -30,28 +29,31 @@ const AdminMenu = () => {
                     <BsPersonVideo3 />
                     Teacher
                 </Link>
-                <li className="flex items-center gap-3 text-[#ffffffa4]">
-                    <BsFillPersonLinesFill /> Class
-                </li>
-                <li className="flex items-center gap-3 text-[#ffffffa4]">
+                <Link to={"/students"} className="flex items-center gap-3 text-[#ffffffa4]">
                     <PiStudentFill />
-                    Student
-                </li>
-                <li className="flex items-center gap-3 text-[#ffffffa4]">
+                    Students
+                </Link>
+                <Link className="flex items-center gap-3 text-[#ffffffa4]">
+                    <BsFillPersonLinesFill /> Class
+                </Link>
+                <Link to={"/admin-notices"} className="flex items-center gap-3 text-[#ffffffa4]">
                     <BsPaperclip /> Notices
-                </li>
-                <li className="flex items-center gap-3 text-[#ffffffa4]">
+                </Link>
+                <Link to={"/public-notice"} className="flex items-center gap-3 text-[#ffffffa4]">
                     <GiPublicSpeaker /> Public Notices
-                </li>
+                </Link>                
+                <Link to={"/"} className="flex items-center gap-3 text-[#ffffffa4]">
+                    <GiPublicSpeaker /> Manage Class
+                </Link>
 
-                <li className="flex items-center gap-3 text-[#ffffffa4]">
+                <Link className="flex items-center gap-3 text-[#ffffffa4]">
                     <HiOutlineDocumentReport /> Reports
-                </li>
-                <li>
+                </Link>
+                <Link>
                     <button onClick={logOutBtn} className="btn btn-sm bg-red-600 z-10">
                         LogOut
                     </button>
-                </li>
+                </Link>
             </ul>
 
         </>

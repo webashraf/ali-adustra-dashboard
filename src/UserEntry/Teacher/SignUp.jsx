@@ -64,7 +64,7 @@ const TsignUp = () => {
         return <Navigate to={"/"}></Navigate>
       }
     return (
-        <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">
+        <div className="flex justify-center p-20 shadow-2xl  mx-auto mt-20 rounded-lg">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="loginForm space-y-4 w-[300px]"

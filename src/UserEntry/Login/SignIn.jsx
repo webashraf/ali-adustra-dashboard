@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import "./SignIn.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider/AuthProvider";
 import Home from "../../Components/Dashboard/Home/Admin/Home";
@@ -16,15 +16,16 @@ const SignIn = () => {
   const onSubmit = (data) => {
     console.log(data);
     userSignInUsingEmailAndPass(data.email, data.password).then((result) =>
-      console.log(result)
+    console.log(result)
     );
   };
   if (loading) {
     return <span className="loading loading-bars loading-lg"></span>;
   }
-  return !user ? (
-    <div className="flex justify-center py-20 shadow-2xl  mx-auto mt-20 rounded-lg">
-      <form
+
+  return  (
+    <div className="flex justify-center p-20 shadow-2xl  mx-auto mt-20 rounded-lg">
+     {!user ?  <form
         onSubmit={handleSubmit(onSubmit)}
         className="loginForm space-y-4 w-[300px]"
       >
@@ -70,22 +71,13 @@ const SignIn = () => {
             .
           </h3>
         </div>
-      </form>
-    </div>
-  ) : (
-    // <div className="flex justify-center flex-col items-center mt-20">
-    //   <div className="avatar">
-    //     <div className="w-24 mask mask-squircle">
-    //      {user &&  <img src={user?.photoURL} />}
-    //     </div>
-    //   </div>
-    //   {/* <img src={user.photURL} alt="" /> */}
-    //   <h1 className="text-7xl text-center font-serif">
-    //     Dashboard <span className="text-sky-600">{user.displayName}</span>
-    //   </h1>
-    // </div>
-    <Home></Home>
-  );
+      </form> : 
+      
+      <Navigate to={"/"}></Navigate>
+    }
+    </div>    
+
+  )
 };
 
 export default SignIn;
